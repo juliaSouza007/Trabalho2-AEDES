@@ -5,12 +5,12 @@ O objetivo deste trabalho é implementar um player que se movimenta pelo caminho
 Estrutura do Trabalho
 O trabalho será realizado em grupos de 4 alunos e será avaliado em três aspectos: código, apresentação e relatório. A distribuição de pontos é a seguinte:
 
-Código: 5 pontos
-Apresentação: 5 pontos
-Relatório: 5 pontos
-Implementação do Algoritmo A*: 1 ponto extra
-Implementação de um objetivo para o jogo: 1 ponto extra
-Requisitos do Trabalho
+- Código: 5 pontos
+- Apresentação: 5 pontos
+- Relatório: 5 pontos
+- Implementação do Algoritmo A*: 1 ponto extra
+- Implementação de um objetivo para o jogo: 1 ponto extra
+- Requisitos do Trabalho
 
 # Implementação do Player
 
