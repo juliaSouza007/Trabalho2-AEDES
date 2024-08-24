@@ -3,11 +3,11 @@ int tileSize = 20;
 boolean dragging = false;
 
 Map map;
+Caminho caminho;
 
 int x = 1000, y = 1000;
 PVector destino = new PVector();
-PVector origem = new PVector(0, 0);
-int[][] adj;
+PVector origem = new PVector();
 
 void setup() {
   size(800, 800);
@@ -31,58 +31,17 @@ void mouseDragged() {
 
 void mouseReleased() {
   if (!dragging) {
+
+    // Pega as coordenadas do destino
     destino.x = map.gridPosX(mouseX);
     destino.y = map.gridPosY(mouseY);
-
+    // Pega as coordenadas do ponto de origem (player)
     origem.x = x;
     origem.y = y;
+    
+    caminho = new Caminho(destino, origem);
 
-    int linha = 1, coluna = 1;
-
-    // Tamanho da matriz adj
-    if (destino.x > origem.x) linha = (int)destino.x-(int)origem.x+1;
-    else linha = (int)origem.x-(int)destino.x+1;
-
-    if (destino.y > origem.y) coluna = (int)destino.y-(int)origem.y+1;
-    else coluna = (int)origem.y-(int)destino.y+1;
-
-    adj = new int[linha][coluna];
-
-    int v;
-
-    for (int j = 0; j < coluna; j++) {
-      for (int i = 0; i < linha; i++) {
-        v = map.getTileValue(x + i, y - j);
-        println((x + i) + ", " + (y - j));
-
-        switch(v) {
-         case 0: // água
-         adj[i][j] = 0;
-         break;
-         case 1: // grama
-         adj[i][j] = 2;
-         break;
-         case 2: // areia
-         adj[i][j] = 3;
-         break;
-         case 3: // coral
-         adj[i][j] = 0;
-         break;
-         case 4: // pedra
-         adj[i][j] = 0;
-         break;
-         case 5: // cacto
-         adj[i][j] = 0;
-         break;
-         }
-      }
-    }
-
-    println("Tamnho matriz");
-    println("linha: " + str(linha) + ", coluna:" + str(coluna));
-
-    v = map.getTileValue((int)destino.x, (int)destino.y);
-    println("destino.x: " + str(destino.x) + ", destino.y: " + str(destino.y) +"\n");
+    /*int v = map.getTileValue((int)destino.x, (int)destino.y);
     switch(v) {
     case 0: // água
       println("água");
@@ -102,7 +61,7 @@ void mouseReleased() {
     case 5: // cacto
       println("cacto");
       break;
-    }
+    }*/
   } else dragging = false;
 }
 
