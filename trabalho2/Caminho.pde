@@ -36,8 +36,6 @@ class Caminho {
   }
 
   void adicionaArestas() {
-    // Variavel que auxilia no controle do limite do grid
-    int auxLimit = 1;
     for (int i = 0; i < numVertices; i++) {
       for (int j = 0; j < numVertices; j++) {
         // A aresta de um vértice para ele mesmo é 0
@@ -54,7 +52,7 @@ class Caminho {
           
           // Adiciona arestas entre terrenos proximos
           // Se tiver um vizinho à direita, adiciona aresta
-          if (j == i+1 && j < (coluna*numLimit)/coluna) {
+          if (j == i+1 && j%coluna != 0) {
             vizPeso = pesoTerreno(posX+1, posY); // Obtem o peso do vizinho
             adj[i][j] = (float)(vPeso+vizPeso)/2;
             adj[j][i] = adj[i][j];
@@ -69,8 +67,7 @@ class Caminho {
             println("["+i+"] ["+j+"] = "+adj[i][j]);
           }
         }
-      }
-      auxLimit++;
+     }
     }
   }
 
