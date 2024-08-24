@@ -54,7 +54,7 @@ class Caminho {
           
           // Adiciona arestas entre terrenos proximos
           // Se tiver um vizinho à direita, adiciona aresta
-          if (j == i+1 && j != numVertices/coluna) {
+          if (j == i+1 && j < (coluna*numLimit)/coluna) {
             vizPeso = pesoTerreno(posX+1, posY); // Obtem o peso do vizinho
             adj[i][j] = (float)(vPeso+vizPeso)/2;
             adj[j][i] = adj[i][j];
