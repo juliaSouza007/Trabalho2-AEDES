@@ -37,37 +37,34 @@ class Caminho {
 
   void adicionaArestas() {
     for (int i = 0; i < numVertices; i++) {
-      for (int j = 0; j < numVertices; j++) {
-        // A aresta de um vértice para ele mesmo é 0
-        if (i == j) {
-          adj[i][j] = 0;
-        } else {
-          // Obtem a posicao do terreno analisado
-          int posX = posXTerrenoGrid(j);
-          int posY = posXTerrenoGrid(i);
-          // Obtem o valor do terreno analisado
-          int vPeso = pesoTerreno(posX, posY);
-          // Peso de um terreno proximo
-          int vizPeso = 0;
-          
-          // Adiciona arestas entre terrenos proximos
-          // Se tiver um vizinho à direita, adiciona aresta
-          if (j == i+1 && j%coluna != 0) {
-            vizPeso = pesoTerreno(posX+1, posY); // Obtem o peso do vizinho
-            adj[i][j] = (float)(vPeso+vizPeso)/2;
-            adj[j][i] = adj[i][j];
-            println("["+i+"] ["+j+"] = "+adj[i][j]);
-            println("limit: "+ coluna*auxLimit);
-          }
-          // Se tiver um vizinho abaixo, adiciona aresta
-          if (j == i + coluna) {
-            vizPeso = pesoTerreno(posX, posY+1);
-            adj[i][j] = (vPeso+vizPeso)/2;
-            adj[j][i] = adj[i][j];
-            println("["+i+"] ["+j+"] = "+adj[i][j]);
-          }
-        }
-     }
+      // Obtem a posicao do terreno analisado
+      int posX = posXTerrenoGrid(i);
+      int posY = posYTerrenoGrid(i);
+      //println("y[" +i +"] "+posY);
+      // Obtem o valor do terreno analisado
+      int vPeso = pesoTerreno(posY, posX);
+      // Peso de um terreno proximo
+      int viz = 0, vizPeso = 0;
+
+      // Adiciona arestas entre terrenos proximos
+      // Se tiver um vizinho à direita, adiciona aresta
+      if ((i+1)%coluna != 0) {
+        viz = i+1;
+        vizPeso = pesoTerreno(posY, posX+1); // Obtem o peso do vizinho
+        adj[i][viz] = (float)(vPeso+vizPeso)/2;
+        adj[viz][i] = adj[i][viz];
+        println("["+i+"] ["+viz+"] = "+adj[i][viz]);
+        println("["+posY, posX+"]"+"["+posY, (posX+1)+"]");
+      }
+      // Se tiver um vizinho abaixo, adiciona aresta
+      if (i + coluna < numVertices) {
+        viz = i + coluna;
+        vizPeso = pesoTerreno(posY+1, posX);
+        adj[i][viz] = (vPeso+vizPeso)/2;
+        adj[viz][i] = adj[i][viz];
+        println("["+i+"] ["+viz+"] = "+adj[i][viz]);
+        println("["+posY, posX+"]"+"["+(posY+1), posX+"]");
+      }
     }
   }
 
@@ -76,24 +73,28 @@ class Caminho {
    que fazem sentido no contexto do grid
    */
   // Obtem a posicao X do terreno analisado em relacao ao ponto de origem
-  int posXTerrenoGrid(int j) {
-    // Se o destino estiver à direita da origem
-    if (this.destino.x > this.origem.x) {
-      return (int)this.origem.x+j;
-    } else { // Se o destino estiver à esquerda da origem
-      return (int)this.origem.x-(this.coluna-1-j);
+int posXTerrenoGrid(int i) {
+    // Determina a coluna atual com base no índice i
+    int colunaAtual = i % this.coluna;
+
+    // Calcula a posição X da coluna atual
+    if (this.destino.x > this.origem.x) { // Se o destino está à direita da origem
+        return (int) this.origem.x + colunaAtual;
+    } else { // Se o destino está à esquerda da origem
+        return (int) this.origem.x - (this.coluna - 1 - colunaAtual);
     }
-  }
+}
 
   // Obtem a posicao Y do terreno analisado em relacao ao ponto de origem
   int posYTerrenoGrid(int i) {
-    // Se o destino estiver acima da origem
-    if (this.destino.y < this.origem.y) {
-      return (int)this.origem.y-(this.linha-1-i);
-    } else { // Se o destino estiver abaixo da origem
-      return (int)this.origem.y+i;
-    }
-  }
+    int linhaAtual = i/this.coluna;
+    
+    // Verifica se a linha está dentro da faixa do grid
+    //if (linhaAtual >= this.linha || linhaAtual < 0) return 0;
+
+    // Calcula a posição Y da linha atual
+    return (int) this.origem.y + (this.destino.y < this.origem.y ? -(this.linha - 1 - linhaAtual) : linhaAtual);
+} 
 
   int pesoTerreno(int posX, int posY) {
     int v = map.getTileValue(posX, posY);
@@ -129,8 +130,8 @@ class Caminho {
       println();
     }
     println("linha: " + str(linha) + ", coluna:" + str(coluna));
-    //println("origem.x: " + str(origem.x) + ", origem.y: " + str(origem.y));
-    //println("destino.x: " + str(destino.x) + ", destino.y: " + str(destino.y));
+    println("origem.x: " + str(origem.x) + ", origem.y: " + str(origem.y));
+    println("destino.x: " + str(destino.x) + ", destino.y: " + str(destino.y));
   }
 
 
