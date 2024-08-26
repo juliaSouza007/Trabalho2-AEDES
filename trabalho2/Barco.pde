@@ -34,7 +34,7 @@ class Barco {
 
   // Verifica se o player pegou o barco
   boolean verificarBarco(PVector playerPosicao) {
-    if (!pegouBarco && dist(playerPosicao.x, playerPosicao.y, posicao.x, posicao.y) < 5) {
+    if (!pegouBarco && dist(playerPosicao.x, playerPosicao.y, posicao.x, posicao.y) < 1) {
       pegouBarco = true;
       println("Barco disponivel! Agora vc pode se mover na agua.");
     }
