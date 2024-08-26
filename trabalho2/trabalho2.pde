@@ -13,6 +13,7 @@ void setup() {
   size(800, 800);
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
+  caminho = new Caminho(destino, origem);
 }
 
 void draw() {
@@ -22,6 +23,7 @@ void draw() {
   map.display();
   fill(255, 0, 0);
   ellipse(map.screenPosX(x), map.screenPosY(y), 10, 10);
+  caminho.desenhaCaminho();
 }
 
 void mouseDragged() {
@@ -39,7 +41,7 @@ void mouseReleased() {
     origem.x = x;
     origem.y = y;
     
-    caminho = new Caminho(destino, origem);
+    caminho.setCaminho(destino, origem);
 
     /*int v = map.getTileValue((int)destino.x, (int)destino.y);
     switch(v) {
