@@ -4,6 +4,7 @@ boolean dragging = false;
 
 Map map;
 Caminho caminho;
+Barco barco;
 
 int x = 1000, y = 1000;
 PVector destino = new PVector();
@@ -14,6 +15,8 @@ void setup() {
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
   caminho = new Caminho(destino, origem);
+  
+  barco = new Barco(new PVector(x, y), 30);
 }
 
 void draw() {
@@ -24,6 +27,12 @@ void draw() {
   fill(255, 0, 0);
   ellipse(map.screenPosX(x), map.screenPosY(y), 10, 10);
   caminho.desenhaCaminho();
+  
+  barco.display();
+  
+  if (barco.verificarBarco(new PVector(x, y))) {
+    // codigo que deixa o jogador andar na agua
+  }
 }
 
 void mouseDragged() {
