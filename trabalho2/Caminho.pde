@@ -8,6 +8,7 @@ class Caminho {
   float[][] adj;
   PVector destino; // Posicao do destino no grid
   PVector origem; // Posicao da origem no grid
+  Stack<Integer> caminho;
 
   // Construtor da classe Caminho
   Caminho(PVector destino, PVector origem) {
@@ -15,11 +16,21 @@ class Caminho {
     this.origem = origem;
     inicializaMatriz();
     adicionaArestas();
-    printMatriz();
+    int iOrigem = iTerreno(this.origem.y, this.origem.x);
+    int iDestino = iTerreno(this.destino.y, this.destino.x);
+    caminho = Dijkstra(iOrigem, iDestino);
+  }
+  
+  void setCaminho(PVector destino, PVector origem) {
+    this.destino = destino;
+    this.origem = origem;
+    inicializaMatriz();
+    adicionaArestas();
+    //printMatriz();
     int iOrigem = iTerreno(this.origem.y, this.origem.x);
     int iDestino = iTerreno(this.destino.y, this.destino.x);
     println("origem: " + iOrigem + " destino: " + iDestino);
-    //Dijkstra(iOrigem, iDestino);
+    caminho = Dijkstra(iOrigem, iDestino);
   }
 
   // Obtem o tamanho da matriz, o numero de linhas, o numero de colunas e o numero de vertices
@@ -157,7 +168,7 @@ class Caminho {
   }
 
   // Algoritmo de Dijkstra para encontrar o caminho mais curto a partir da origem até o destino
-  void Dijkstra(int origem, int destino) {
+  Stack<Integer> Dijkstra(int origem, int destino) {
     float[] menoresDist = new float[numVertices]; // Array para armazenar as menores distâncias conhecidas da origem até cada vértice
     int[] anterior = new int[numVertices]; // Array para armazenar o vértice anterior no caminho mais curto até cada vértice
 
@@ -211,10 +222,10 @@ class Caminho {
       v = anterior[v];
     }
 
-    desenhaCaminho(caminho); // Chama a função desenhar para visualizar o caminho encontrado
+    return caminho;
   }
 
-  void desenhaCaminho(Stack<Integer> caminho) {
+  void desenhaCaminho() {
     textAlign(CENTER);
     // Desenha as arestas
     stroke(0);
@@ -222,10 +233,9 @@ class Caminho {
     for (int i = 0; i < numVertices; i++) {
       for (int j = i + 1; j < numVertices; j++) {
         stroke(0);
-        if (caminho.contains(i) && caminho.contains(j)) stroke(255, 0, 0);
-        strokeWeight(adj[i][j]);
-        if (adj[i][j] > 0) {
-          line(map.screenPosX(posYTerrenoGrid(i)), map.screenPosY(posXTerrenoGrid(i)), map.screenPosX(posYTerrenoGrid(j)), map.screenPosY(posXTerrenoGrid(i)));
+        if (this.caminho.contains(i) && this.caminho.contains(j) && adj[i][j] > 0) {
+          stroke(255, 0, 0);
+          line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
         }
       }
     }
