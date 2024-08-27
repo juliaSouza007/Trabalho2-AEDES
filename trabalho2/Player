@@ -1,0 +1,31 @@
+class Player {
+  PVector position; // Posição do player no grid
+  float speed; // Velocidade do player
+  boolean hasBoat; // Indica se o player tem um barco
+  Caminho caminho;// ARMAZENA O CAMINHO
+
+  Player(int x, int y, Caminho caminho) {
+    this.position = new PVector(x, y);
+    this.speed = 1; // Velocidade padrão do player
+    this.hasBoat = false; // O player não tem um barco no início
+    this.caminho = caminho;
+  }
+
+  void update(int i) {
+    this.position.x = map.screenPosX(caminho.posXTerrenoGrid(i));
+    this.position.y = map.screenPosY(caminho.posYTerrenoGrid(i));
+  }
+
+  void display() {
+
+      fill(255, 0, 0);
+      ellipse(map.screenPosX((int)position.x), map.screenPosY((int)position.y), 10, 10);
+    
+  }
+  
+  void path() {
+    for (int i = 0; i < caminho.numVertices; i++) {
+      update(i);
+    }
+  }
+}
