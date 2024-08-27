@@ -9,31 +9,34 @@ Barco barco;
 Player player;
 
 int x = 1000, y = 1000;
-PVector destino = new PVector();
-PVector origem = new PVector();
+PVector destino = new PVector(x, y);
+PVector origem = new PVector(x, y);
 
 void setup() {
   size(800, 800);
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
-  caminho = new Caminho(destino, origem, false);
-  caminhoBarco = new Caminho(destino, origem, false);
+  caminho = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
+  caminhoBarco = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
   player = new Player(x, y, caminho);
 
   barco = new Barco(new PVector(x, y), 30);
 }
+
+int tempo = 0;
 
 void draw() {
   background(0);
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-  player.display();
-  //player.path();
   caminho.desenhaCaminho();
   caminhoBarco.desenhaCaminho();
+  player.display();
 
   barco.display();
+  
+  tempo++;
 
   if (barco.verificarBarco(new PVector(x, y))) {
     // codigo que deixa o jogador andar na agua
@@ -51,20 +54,20 @@ void mouseReleased() {
     // Pega as coordenadas do destino
     destino.x = map.gridPosX(mouseX);
     destino.y = map.gridPosY(mouseY);
-    // Pega as coordenadas do ponto de origem (player)
-    origem.x = x;
-    origem.y = y;
+
+    origem =  player.position;
 
     // Verifica se o destino é água, se for o jogador vai para o barco pelo caminhio mais curto e depois vai para o destino
     if (map.getTileValue((int)destino.x, (int)destino.y) == 0) {
       caminhoBarco.setCaminho(barco.posicao, origem, barco.pegouBarco);
       caminho.setCaminho(destino, barco.posicao, barco.pegouBarco);
-     
     } else {
       caminho.setCaminho(destino, origem, barco.pegouBarco);
-      caminhoBarco.setCaminho(new PVector(0,0), new PVector(0,0), false);
+      caminhoBarco.setCaminho(new PVector(0, 0), new PVector(0, 0), false);
+      caminho.Dijkstra();
       player.caminho.caminho = caminho.caminho;
     }
+
 
     /*int v = map.getTileValue((int)destino.x, (int)destino.y);
      switch(v) {
