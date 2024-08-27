@@ -6,6 +6,7 @@ Map map;
 Caminho caminho;
 Caminho caminhoBarco;
 Barco barco;
+Player player;
 
 int x = 1000, y = 1000;
 PVector destino = new PVector();
@@ -17,6 +18,7 @@ void setup() {
   map.reset(x, y);
   caminho = new Caminho(destino, origem, false);
   caminhoBarco = new Caminho(destino, origem, false);
+  player = new Player(x, y, caminho);
 
   barco = new Barco(new PVector(x, y), 30);
 }
@@ -26,8 +28,8 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-  fill(255, 0, 0);
-  ellipse(map.screenPosX(x), map.screenPosY(y), 10, 10);
+  player.display();
+  //player.path();
   caminho.desenhaCaminho();
   caminhoBarco.desenhaCaminho();
 
@@ -57,9 +59,11 @@ void mouseReleased() {
     if (map.getTileValue((int)destino.x, (int)destino.y) == 0) {
       caminhoBarco.setCaminho(barco.posicao, origem, barco.pegouBarco);
       caminho.setCaminho(destino, barco.posicao, barco.pegouBarco);
+     
     } else {
       caminho.setCaminho(destino, origem, barco.pegouBarco);
       caminhoBarco.setCaminho(new PVector(0,0), new PVector(0,0), false);
+      player.caminho.caminho = caminho.caminho;
     }
 
     /*int v = map.getTileValue((int)destino.x, (int)destino.y);
@@ -88,8 +92,8 @@ void mouseReleased() {
 
 void keyPressed() {
   if (key == 'c' || key == 'C') map.reset();
-  if (key == 'w' || key == 'W') y--;
-  if (key == 's' || key == 'S') y++;
-  if (key == 'a' || key == 'A') x--;
-  if (key == 'd' || key == 'D') x++;
+  if (key == 'w' || key == 'W') player.position.y--;
+  if (key == 's' || key == 'S') player.position.y++;
+  if (key == 'a' || key == 'A') player.position.x--;
+  if (key == 'd' || key == 'D') player.position.x++;
 }
