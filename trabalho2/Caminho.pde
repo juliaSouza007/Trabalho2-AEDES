@@ -9,28 +9,20 @@ class Caminho {
   PVector destino; // Posicao do destino no grid
   PVector origem; // Posicao da origem no grid
   Stack<Integer> caminho;
+  boolean barco;
 
   // Construtor da classe Caminho
-  Caminho(PVector destino, PVector origem) {
-    this.destino = destino;
-    this.origem = origem;
-    inicializaMatriz();
-    adicionaArestas();
-    int iOrigem = iTerreno(this.origem.y, this.origem.x);
-    int iDestino = iTerreno(this.destino.y, this.destino.x);
-    caminho = Dijkstra(iOrigem, iDestino);
+  Caminho(PVector destino, PVector origem, boolean barco) {
+    setCaminho(destino, origem, barco);
   }
   
-  void setCaminho(PVector destino, PVector origem) {
+  void setCaminho(PVector destino, PVector origem, boolean barco) {
     this.destino = destino;
     this.origem = origem;
+    this.barco = barco;
     inicializaMatriz();
     adicionaArestas();
-    //printMatriz();
-    int iOrigem = iTerreno(this.origem.y, this.origem.x);
-    int iDestino = iTerreno(this.destino.y, this.destino.x);
-    println("origem: " + iOrigem + " destino: " + iDestino);
-    caminho = Dijkstra(iOrigem, iDestino);
+    this.caminho = Dijkstra();
   }
 
   // Obtem o tamanho da matriz, o numero de linhas, o numero de colunas e o numero de vertices
@@ -134,7 +126,9 @@ class Caminho {
     float vPeso = 0;
     switch(v) {
     case 0: // água
-      vPeso = 1;
+      //if (barco) vPeso = 1;
+      //else vPeso = Float.MAX_VALUE;
+       vPeso = 1;
       break;
     case 1: // grama
       vPeso = 2;
@@ -168,7 +162,10 @@ class Caminho {
   }
 
   // Algoritmo de Dijkstra para encontrar o caminho mais curto a partir da origem até o destino
-  Stack<Integer> Dijkstra(int origem, int destino) {
+  Stack<Integer> Dijkstra() {
+    int iOrigem = iTerreno(this.origem.y, this.origem.x); // Obtem o indice da origem na matrizAdj
+    int iDestino = iTerreno(this.destino.y, this.destino.x);  // Obtem o indice do destino na matrizAdj
+    
     float[] menoresDist = new float[numVertices]; // Array para armazenar as menores distâncias conhecidas da origem até cada vértice
     int[] anterior = new int[numVertices]; // Array para armazenar o vértice anterior no caminho mais curto até cada vértice
 
@@ -178,7 +175,7 @@ class Caminho {
       anterior[v] = -1; // Define o vértice anterior como -1 (ainda não definido)
     }
 
-    menoresDist[origem] = 0; // A distância da origem para ela mesma é 0
+    menoresDist[iOrigem] = 0; // A distância da origem para ela mesma é 0
 
     int[] Q = new int[numVertices]; // Array para controlar os vértices visitados
 
@@ -213,8 +210,8 @@ class Caminho {
 
     // Reconstrói o caminho mais curto usando a pilha e desenha o caminho encontrado
     Stack<Integer> caminho = new Stack<Integer>(); // Pilha para armazenar o caminho do destino até a origem
-    caminho.push(destino); // Inicia com o vértice de destino
-    int v = anterior[destino]; // Obtém o vértice anterior ao destino
+    caminho.push(iDestino); // Inicia com o vértice de destino
+    int v = anterior[iDestino]; // Obtém o vértice anterior ao destino
 
     // Preenche a pilha com os vértices do caminho mais curto
     while (v >= 0) {
