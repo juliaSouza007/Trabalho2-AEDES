@@ -2,59 +2,59 @@ class Player {
   PVector position; // Posição do player no grid
   float speed; // Velocidade do player
   boolean hasBoat; // Indica se o player tem um barco
-  Caminho caminho;// ARMAZENA O CAMINHO
-  int destino;
+  LinkedList<PVector> caminho;
 
-  Player(int x, int y, Caminho caminho) {
+  Player(int x, int y, LinkedList<PVector> caminho) {
     this.position = new PVector(x, y);
     this.speed = 1; // Velocidade padrão do player
     this.hasBoat = false; // O player não tem um barco no início
     this.caminho = caminho;
-    this.destino = 0;
   }
 
   void update() {
-    if (caminho.caminho.isEmpty()) {
-      println("Caminho vazio!");
-      return;
-    }
+    //if (caminho == null) {
+    //  println("Caminho vazio!");
+    //  return;
+    //}
 
-    if (destino == -1 && !caminho.caminho.empty()) {
-      destino = caminho.caminho.pop();
-      println("Novo destino: " + destino);
+    //if (destino == -1 && !caminho.caminho.empty()) {
+    //  destino = caminho.caminho.pop();
+    //  println("Novo destino: " + destino);
 
-      position.x = caminho.posXTerrenoGrid(destino);
-      position.y = caminho.posYTerrenoGrid(destino);
-      println("Alvo: " + position.x + ", " + position.y);
-    }
+    //  position.x = caminho.posXTerrenoGrid(destino);
+    //  position.y = caminho.posYTerrenoGrid(destino);
+    //  println("Alvo: " + position.x + ", " + position.y);
+    //}
 
-    if (destino != -1) {
-      float targetX = caminho.posXTerrenoGrid(destino);
-      float targetY = caminho.posYTerrenoGrid(destino);
-      PVector target = new PVector(targetX, targetY);
+    //if (destino != -1) {
+    //  float targetX = caminho.posXTerrenoGrid(destino);
+    //  float targetY = caminho.posYTerrenoGrid(destino);
+    //  PVector target = new PVector(targetX, targetY);
 
-      println("Alvo: " + targetX + ", " + targetY);
+    //  println("Alvo: " + targetX + ", " + targetY);
 
-      PVector direction = target.sub(position).normalize().mult(speed);
-      position.add(direction);
+    //  PVector direction = target.sub(position).normalize().mult(speed);
+    //  position.add(direction);
 
-      if (position.dist(target) < speed) {
-        position.set(target);
-        destino = -1;
-        println("Chegou ao destino: " + target);
-      }
-    }
+    //  if (position.dist(target) < speed) {
+    //    position.set(target);
+    //    destino = -1;
+    //    println("Chegou ao destino: " + target);
+    //  }
+    //}
+  }
+
+  void setCaminho(LinkedList<PVector> caminho) {
+    this.caminho = caminho;
   }
 
   void display() {
-    //update();
     if (frameCount % 10 == 0) {
-      print(0);
-      if (!caminho.caminho.isEmpty()) {
-        print(1);
-        destino = caminho.caminho.pop();
-        position.x = caminho.posXTerrenoGrid(destino);
-        position.y = caminho.posYTerrenoGrid(destino);
+      if (caminho.size() != 0) {
+        println("Tamanho:" +caminho.size());
+        this.position = caminho.get(caminho.size()-1);
+        println(this.position);
+        caminho.remove(caminho.size()-1);
       }
     }
     fill(255, 0, 0);
