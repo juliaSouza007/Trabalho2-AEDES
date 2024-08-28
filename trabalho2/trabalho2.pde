@@ -1,42 +1,43 @@
-int chunkSize = 100;
-int tileSize = 20;
-boolean dragging = false;
-
+int chunkSize;
+int tileSize;
+boolean dragging;
 Map map;
 Caminho caminho;
 Caminho caminhoBarco;
 Barco barco;
 Player player;
-
-int x = 1000, y = 1000;
-PVector destino = new PVector(x, y);
-PVector origem = new PVector(x, y);
+int x, y;
+PVector destino;
+PVector origem;
 
 void setup() {
   size(800, 800);
+  chunkSize = 100;
+  tileSize = 20;
+  dragging = false;
+  x = 1000;
+  y = 1000;
+  destino = new PVector(x, y);
+  origem = new PVector(x, y);
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
-  caminho = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
-  caminhoBarco = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
-  player = new Player(x, y, caminho);
+  caminho = new Caminho(destino, origem);
+  caminhoBarco = new Caminho(destino, origem);
+  player = new Player(x, y, caminho.caminho);
 
   barco = new Barco(new PVector(x, y), 30);
 }
-
-int tempo = 0;
 
 void draw() {
   background(0);
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
+
   caminho.desenhaCaminho();
   caminhoBarco.desenhaCaminho();
   player.display();
-
   barco.display();
-  
-  tempo++;
 
   if (barco.verificarBarco(new PVector(x, y))) {
     // codigo que deixa o jogador andar na agua
@@ -61,11 +62,14 @@ void mouseReleased() {
     if (map.getTileValue((int)destino.x, (int)destino.y) == 0) {
       caminhoBarco.setCaminho(barco.posicao, origem, barco.pegouBarco);
       caminho.setCaminho(destino, barco.posicao, barco.pegouBarco);
+      
+
+      //player.setCaminho(caminho.caminho);
     } else {
       caminho.setCaminho(destino, origem, barco.pegouBarco);
-      caminhoBarco.setCaminho(new PVector(0, 0), new PVector(0, 0), false);
-      caminho.Dijkstra();
-      player.caminho.caminho = caminho.caminho;
+      player.setCaminho(caminho.caminho);
+
+      //caminhoBarco.setCaminho(new PVector(0, 0), new PVector(0, 0), false);
     }
 
 
