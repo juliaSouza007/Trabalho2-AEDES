@@ -18,7 +18,7 @@ class Barco {
       y = (int)playerPosicao.y + (int)random(-maxDist, maxDist);
       
       tileValue = map.getTileValue(x, y);
-      println("Tentando posicao: (" + x + ", " + y + ") com valor de tile: " + tileValue);
+      //println("Tentando posicao: (" + x + ", " + y + ") com valor de tile: " + tileValue);
       
     } while (tileValue == 0);
     
