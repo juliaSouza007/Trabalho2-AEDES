@@ -20,9 +20,9 @@ class Caminho {
     this.destino = destino;
     this.origem = origem;
     this.barco = barco;
+    caminho = new Stack<Integer>();
     inicializaMatriz();
     adicionaArestas();
-    this.caminho = Dijkstra();
   }
 
   // Obtem o tamanho da matriz, o numero de linhas, o numero de colunas e o numero de vertices
@@ -162,7 +162,7 @@ class Caminho {
   }
 
   // Algoritmo de Dijkstra para encontrar o caminho mais curto a partir da origem até o destino
-  Stack<Integer> Dijkstra() {
+  void Dijkstra() {
     int iOrigem = iTerreno(this.origem.y, this.origem.x); // Obtem o indice da origem na matrizAdj
     int iDestino = iTerreno(this.destino.y, this.destino.x);  // Obtem o indice do destino na matrizAdj
     
@@ -219,7 +219,7 @@ class Caminho {
       v = anterior[v];
     }
 
-    return caminho;
+    this.caminho = caminho;
   }
 
   void desenhaCaminho() {
@@ -233,7 +233,7 @@ class Caminho {
         if (this.caminho.contains(i) && this.caminho.contains(j) && adj[i][j] > 0) {
           stroke(255, 0, 0);
           line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
-        }
+        } 
       }
     }
   }
