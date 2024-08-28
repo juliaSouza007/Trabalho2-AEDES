@@ -1,4 +1,5 @@
 import java.util.Stack;
+import java.util.LinkedList;
 
 // Definição da classe Caminho
 class Caminho {
@@ -8,21 +9,25 @@ class Caminho {
   float[][] adj;
   PVector destino; // Posicao do destino no grid
   PVector origem; // Posicao da origem no grid
-  Stack<Integer> caminho;
   boolean barco;
+  Stack<Integer> icaminho;
+  LinkedList<PVector> caminho;
 
   // Construtor da classe Caminho
-  Caminho(PVector destino, PVector origem, boolean barco) {
-    setCaminho(destino, origem, barco);
+  Caminho(PVector destino, PVector origem) {
+    setCaminho(destino, origem, false);
   }
   
   void setCaminho(PVector destino, PVector origem, boolean barco) {
     this.destino = destino;
     this.origem = origem;
     this.barco = barco;
-    caminho = new Stack<Integer>();
+    this.icaminho = new Stack<Integer>();
+    this.caminho = new LinkedList<PVector>();
     inicializaMatriz();
     adicionaArestas();
+    Dijkstra();
+    guardaCaminho();
   }
 
   // Obtem o tamanho da matriz, o numero de linhas, o numero de colunas e o numero de vertices
@@ -128,7 +133,7 @@ class Caminho {
     case 0: // água
       //if (barco) vPeso = 1;
       //else vPeso = Float.MAX_VALUE;
-       vPeso = 1;
+         vPeso = 1;
       break;
     case 1: // grama
       vPeso = 2;
@@ -211,15 +216,31 @@ class Caminho {
     // Reconstrói o caminho mais curto usando a pilha e desenha o caminho encontrado
     Stack<Integer> caminho = new Stack<Integer>(); // Pilha para armazenar o caminho do destino até a origem
     caminho.push(iDestino); // Inicia com o vértice de destino
+    //this.caminho.add(new PVector(map.screenPosX(posXTerrenoGrid(iDestino)),  map.screenPosY(posYTerrenoGrid(iDestino))));
     int v = anterior[iDestino]; // Obtém o vértice anterior ao destino
 
     // Preenche a pilha com os vértices do caminho mais curto
     while (v >= 0) {
       caminho.push(v);
+      //this.caminho.add(new PVector(map.screenPosX(posXTerrenoGrid(v)),  map.screenPosY(posYTerrenoGrid(v))));
       v = anterior[v];
     }
 
-    this.caminho = caminho;
+    this.icaminho = caminho;
+    
+  }
+  
+  void guardaCaminho() {
+    for (int v: this.icaminho) {
+      this.caminho.add(new PVector(posXTerrenoGrid(v),  posYTerrenoGrid(v)));
+      println("Vertice: " + v + " PosX: " + posXTerrenoGrid(v) + " PosY:" + posYTerrenoGrid(v));
+    }
+  }
+  
+  void concatenaCaminhos(LinkedList<PVector> outroCaminho) {
+    for (int i = 0; i < outroCaminho.size(); i++) {
+        caminho.add(outroCaminho.get(i));
+      }
   }
 
   void desenhaCaminho() {
@@ -230,10 +251,12 @@ class Caminho {
     for (int i = 0; i < numVertices; i++) {
       for (int j = i + 1; j < numVertices; j++) {
         stroke(0);
-        if (this.caminho.contains(i) && this.caminho.contains(j) && adj[i][j] > 0) {
+        if (this.icaminho.contains(i) && this.icaminho.contains(j) && adj[i][j] > 0) {
           stroke(255, 0, 0);
           line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
-        } 
+        }// else if (adj[i][j] > 0) {
+        // line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
+        //} 
       }
     }
   }
