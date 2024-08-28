@@ -16,14 +16,12 @@ void setup() {
   size(800, 800);
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
-  caminho = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
-  caminhoBarco = new Caminho(new PVector(0, 0), new PVector(0, 0), false);
+  caminho = new Caminho(destino, origem, false);
+  caminhoBarco = new Caminho(destino, origem, false);
   player = new Player(x, y, caminho);
 
   barco = new Barco(new PVector(x, y), 30);
 }
-
-int tempo = 0;
 
 void draw() {
   background(0);
@@ -35,8 +33,6 @@ void draw() {
   player.display();
 
   barco.display();
-  
-  tempo++;
 
   if (barco.verificarBarco(new PVector(x, y))) {
     // codigo que deixa o jogador andar na agua
