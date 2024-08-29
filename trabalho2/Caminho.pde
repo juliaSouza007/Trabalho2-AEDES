@@ -192,23 +192,24 @@ class Caminho {
         }
       }
 
-      if (u != -1) {
-        Q[u] = 1; // Marca o vértice u como visitado
+      if (u == -1) break;
 
-        // Atualiza as distâncias dos vértices adjacentes ao vértice u
-        for (int v = 0; v < numVertices; v++) {
-          if (u == v || adj[u][v] == 0) continue; // Se v é u ou não há aresta entre u e v, continua para o próximo v
+      Q[u] = 1; // Marca o vértice u como visitado
 
-          float alt = uDist + adj[u][v]; // Calcula a possível nova distância até v
+      // Atualiza as distâncias dos vértices adjacentes ao vértice u
+      for (int v = 0; v < numVertices; v++) {
+        if (u == v || adj[u][v] == 0) continue; // Se v é u ou não há aresta entre u e v, continua para o próximo v
 
-          // Se encontrar um caminho mais curto até v, atualiza menoresDist e anterior
-          if (alt < menoresDist[v]) {
-            menoresDist[v] = alt;
-            anterior[v] = u;
-          }
+        float alt = uDist + adj[u][v]; // Calcula a possível nova distância até v
+
+        // Se encontrar um caminho mais curto até v, atualiza menoresDist e anterior
+        if (alt < menoresDist[v]) {
+          menoresDist[v] = alt;
+          anterior[v] = u;
         }
       }
     }
+
 
     // Reconstrói o caminho mais curto usando a pilha e desenha o caminho encontrado
     Stack<Integer> caminho = new Stack<Integer>(); // Pilha para armazenar o caminho do destino até a origem
@@ -232,7 +233,7 @@ class Caminho {
 
   void concatenaCaminho(Stack<PVector> outroCaminho) {
     for (int i = 0; i < outroCaminho.size(); i++) {
-      caminho.add(outroCaminho.get(i));
+      this.caminho.add(outroCaminho.get(i));
     }
   }
 
@@ -241,6 +242,7 @@ class Caminho {
     // Desenha as arestas
     stroke(0);
     strokeWeight(1);
+
     for (int i = 0; i < numVertices; i++) {
       for (int j = i + 1; j < numVertices; j++) {
         stroke(0);
