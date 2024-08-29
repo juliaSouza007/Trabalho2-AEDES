@@ -63,7 +63,6 @@ void mouseReleased() {
       caminho.setCaminho(destino, barco.posicao, true);
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
-      println(player.pegouBarco);
     } else {
       caminho.setCaminho(destino, origem, player.pegouBarco);
       player.setCaminho(caminho.caminho);
