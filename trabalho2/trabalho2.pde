@@ -60,8 +60,7 @@ void mouseReleased() {
     // Verifica se o destino é água, se for o jogador vai para o barco pelo caminhio mais curto e depois vai para o destino
     if (map.getTileValue((int)destino.x, (int)destino.y) == 0 && !player.pegouBarco) {
       caminhoBarco.setCaminho(barco.posicao, origem, player.pegouBarco);
-      caminhoBarco.Dijkstra();
-      caminho.setCaminho(destino, barco.posicao, player.pegouBarco);
+      caminho.setCaminho(destino, barco.posicao, true);
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
       println(player.pegouBarco);
