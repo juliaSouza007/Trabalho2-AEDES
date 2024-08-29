@@ -25,6 +25,7 @@ class Player {
         this.position = caminho.pop();
       }
     }
+    noStroke();
     fill(255, 0, 0);
     ellipse(map.screenPosX((int)position.x), map.screenPosY((int)position.y), 10, 10);
   }
