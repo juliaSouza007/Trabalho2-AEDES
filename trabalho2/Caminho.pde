@@ -16,7 +16,7 @@ class Caminho {
   Caminho(PVector destino, PVector origem) {
     setCaminho(destino, origem, false);
   }
-  
+
   void setCaminho(PVector destino, PVector origem, boolean barco) {
     this.destino = destino;
     this.origem = origem;
@@ -128,7 +128,7 @@ class Caminho {
     case 0: // água
       if (barco) vPeso = 1;
       else vPeso = Float.MAX_VALUE;
-         //vPeso = 1;
+      //vPeso = 1;
       break;
     case 1: // grama
       vPeso = 2;
@@ -165,7 +165,7 @@ class Caminho {
   void Dijkstra() {
     int iOrigem = iTerreno(this.origem.y, this.origem.x); // Obtem o indice da origem na matrizAdj
     int iDestino = iTerreno(this.destino.y, this.destino.x);  // Obtem o indice do destino na matrizAdj
-    
+
     float[] menoresDist = new float[numVertices]; // Array para armazenar as menores distâncias conhecidas da origem até cada vértice
     int[] anterior = new int[numVertices]; // Array para armazenar o vértice anterior no caminho mais curto até cada vértice
 
@@ -191,19 +191,21 @@ class Caminho {
           uDist = menoresDist[v];
         }
       }
-      
-      Q[u] = 1; // Marca o vértice u como visitado
 
-      // Atualiza as distâncias dos vértices adjacentes ao vértice u
-      for (int v = 0; v < numVertices; v++) {
-        if (u == v || adj[u][v] == 0) continue; // Se v é u ou não há aresta entre u e v, continua para o próximo v
+      if (u != -1) {
+        Q[u] = 1; // Marca o vértice u como visitado
 
-        float alt = uDist + adj[u][v]; // Calcula a possível nova distância até v
+        // Atualiza as distâncias dos vértices adjacentes ao vértice u
+        for (int v = 0; v < numVertices; v++) {
+          if (u == v || adj[u][v] == 0) continue; // Se v é u ou não há aresta entre u e v, continua para o próximo v
 
-        // Se encontrar um caminho mais curto até v, atualiza menoresDist e anterior
-        if (alt < menoresDist[v]) {
-          menoresDist[v] = alt;
-          anterior[v] = u;
+          float alt = uDist + adj[u][v]; // Calcula a possível nova distância até v
+
+          // Se encontrar um caminho mais curto até v, atualiza menoresDist e anterior
+          if (alt < menoresDist[v]) {
+            menoresDist[v] = alt;
+            anterior[v] = u;
+          }
         }
       }
     }
@@ -220,19 +222,18 @@ class Caminho {
     }
 
     this.icaminho = caminho;
-    
   }
-  
+
   void guardaCaminho() {
-    for (int v: this.icaminho) {
-      this.caminho.add(new PVector(posXTerrenoGrid(v),  posYTerrenoGrid(v)));
+    for (int v : this.icaminho) {
+      this.caminho.add(new PVector(posXTerrenoGrid(v), posYTerrenoGrid(v)));
     }
   }
-  
+
   void concatenaCaminho(Stack<PVector> outroCaminho) {
     for (int i = 0; i < outroCaminho.size(); i++) {
-        caminho.add(outroCaminho.get(i));
-      }
+      caminho.add(outroCaminho.get(i));
+    }
   }
 
   void desenhaCaminho() {
