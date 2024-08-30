@@ -10,6 +10,9 @@ int x, y;
 PVector destino;
 PVector origem;
 
+int speedUp = 1; // Aumentar velocidade geral, 1 para Normal
+boolean tp = false; // teleport
+
 void setup() {
   size(800, 800);
   chunkSize = 100;
@@ -23,9 +26,9 @@ void setup() {
   map.reset(x, y);
   caminho = new Caminho(destino, origem);
   caminhoBarco = new Caminho(destino, origem);
-  player = new Player(x, y, caminho.caminho);
+  player = new Player(x, y);
 
-  barco = new Barco(new PVector(x, y), 30);
+  barco = new Barco(new PVector(x, y), 30);  
 }
 
 void draw() {
@@ -33,7 +36,6 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-
   caminho.desenhaCaminho();
   caminhoBarco.desenhaCaminho();
   player.display();
@@ -50,7 +52,11 @@ void mouseDragged() {
 
 void mouseReleased() {
   if (!dragging) {
-
+    if (tp){ // Sistema de teletransporte só para testes!
+      player.position = new PVector(map.gridPosX(mouseX), map.gridPosY(mouseY));
+      tp = false;
+    }
+    
     // Pega as coordenadas do destino
     destino.x = map.gridPosX(mouseX);
     destino.y = map.gridPosY(mouseY);
@@ -63,7 +69,7 @@ void mouseReleased() {
       caminho.setCaminho(destino, barco.posicao, true);
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
-    } else {
+    } else if (true){
       caminho.setCaminho(destino, origem, player.pegouBarco);
       player.setCaminho(caminho.caminho);
       caminhoBarco.setCaminho(new PVector(0, 0), new PVector(0, 0), player.pegouBarco); // reseta o caminho ate o barco
@@ -72,13 +78,18 @@ void mouseReleased() {
 }
 
 void keyPressed() {
+
   if (key == 'c' || key == 'C') map.reset();
-  if (key == 'w' || key == 'W') player.position.y--;
-  if (key == 's' || key == 'S') player.position.y++;
-  if (key == 'a' || key == 'A') player.position.x--;
-  if (key == 'd' || key == 'D') player.position.x++;
+  
+  // Chama move() para realizar o check de bloco
+  if (key == 'w' || key == 'W') player.move((int)player.position.x, (int)player.position.y-1);
+  if (key == 's' || key == 'S') player.move((int)player.position.x, (int)player.position.y+1);
+  if (key == 'a' || key == 'A') player.move((int)player.position.x-1, (int)player.position.y);
+  if (key == 'd' || key == 'D') player.move((int)player.position.x+1, (int)player.position.y);
   
   if (key == 'p' || key == 'P') centralizarPlayer();
+  
+  if (key == 't') tp = true;
 }
   
 void centralizarPlayer() {
