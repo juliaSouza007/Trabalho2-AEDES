@@ -13,11 +13,7 @@ class Caminho {
   Stack<PVector> caminho;
 
   // Construtor da classe Caminho
-  Caminho(PVector destino, PVector origem) {
-    setCaminho(destino, origem, false);
-  }
-
-  void setCaminho(PVector destino, PVector origem, boolean barco) {
+  Caminho(PVector destino, PVector origem, boolean barco) {
     this.destino = destino;
     this.origem = origem;
     this.barco = barco;
@@ -32,10 +28,10 @@ class Caminho {
   // Obtem o tamanho da matriz, o numero de linhas, o numero de colunas e o numero de vertices
   void inicializaMatriz() {
     // Obtem o tamanho da matrizAdj por meio da diferença entre as coordenadas
-    if (destino.x > origem.x) this.coluna = (int)destino.x-(int)origem.x+1;
-    else this.coluna = (int)origem.x-(int)destino.x+1;
-    if (destino.y > origem.y) this.linha = (int)destino.y-(int)origem.y+1;
-    else this.linha = (int)origem.y-(int)destino.y+1;
+    if (destino.x > origem.x) this.coluna = (int)destino.x-(int)origem.x+5;
+    else this.coluna = (int)origem.x-(int)destino.x+5;
+    if (destino.y > origem.y) this.linha = (int)destino.y-(int)origem.y+5;
+    else this.linha = (int)origem.y-(int)destino.y+5;
 
     this.numVertices = this.linha*this.coluna;
 
@@ -128,7 +124,6 @@ class Caminho {
     case 0: // água
       if (barco) vPeso = 1;
       else vPeso = Float.MAX_VALUE;
-      //vPeso = 1;
       break;
     case 1: // grama
       vPeso = 2;
@@ -249,7 +244,9 @@ class Caminho {
         if (this.icaminho.contains(i) && this.icaminho.contains(j) && adj[i][j] > 0) {
           stroke(255, 0, 0);
           line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
-        }
+        }// else if (adj[i][j] > 0) {
+        //    line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
+        //}
       }
     }
   }
