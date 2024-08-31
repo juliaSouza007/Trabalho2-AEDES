@@ -6,10 +6,11 @@ Caminho caminho;
 Caminho caminhoBarco;
 Barco barco;
 Player player;
+Stone stone;
 int x, y;
 PVector destino;
 PVector origem;
-int speedUp = 1; // Aumentar velocidade geral, 1 para Normal
+int speedUp = 15; // Aumentar velocidade geral, 1 para Normal
 boolean tp = false; // teleport
 
 void setup() {
@@ -21,7 +22,7 @@ void setup() {
   y = 1000;
   destino = new PVector(x, y);
   origem = new PVector(x, y);
-  map = new Map(chunkSize, tileSize);
+  map = new Map(chunkSize, tileSize, new PVector(x, y), 20);
   map.reset(x, y);
   player = new Player(x, y);
 
@@ -33,6 +34,7 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
+  collectStone(player, map);
   
   if (caminho != null) caminho.desenhaCaminho();
   if (caminhoBarco != null) caminhoBarco.desenhaCaminho();
@@ -41,6 +43,12 @@ void draw() {
 
   if (!player.verificarBarco()) {
     barco.display();
+  }
+  
+  for (Stone stone : map.stones){
+    if (stone.checkCollision((int)player.position.x, (int)player.position.y)){
+      stone.display();
+    }
   }
 }
 
@@ -102,4 +110,20 @@ void centralizarPlayer() {
   
   // Atualizar a posição do mapa com o novo offset
   map.setOffset(offsetX, offsetY);
+}
+
+void collectStone(Player player, Map map) {
+  for (int i = map.stones.size() - 1; i >= 0; i--) {  // Itera de trás para frente para evitar problemas de remoção
+    Stone stone = map.stones.get(i);
+    if (stone.checkCollision((int)player.position.x, (int)player.position.y)) {
+      if (stone.isReal) {
+        println("Pedra verdadeira coletada!");
+        // Aumentar a pontuação ou outro efeito
+      } else {
+        println("Você perdeu!");
+        // Implementar lógica de fim de jogo ou penalidade
+      }
+      map.stones.remove(i);  // Remove a pedra da lista após ser coletada
+    }
+  }
 }
