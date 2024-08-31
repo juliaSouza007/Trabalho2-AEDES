@@ -9,7 +9,6 @@ Player player;
 int x, y;
 PVector destino;
 PVector origem;
-
 int speedUp = 1; // Aumentar velocidade geral, 1 para Normal
 boolean tp = false; // teleport
 
@@ -24,8 +23,6 @@ void setup() {
   origem = new PVector(x, y);
   map = new Map(chunkSize, tileSize);
   map.reset(x, y);
-  caminho = new Caminho(destino, origem);
-  caminhoBarco = new Caminho(destino, origem);
   player = new Player(x, y);
 
   barco = new Barco(new PVector(x, y), 30);  
@@ -36,8 +33,10 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-  caminho.desenhaCaminho();
-  caminhoBarco.desenhaCaminho();
+  
+  if (caminho != null) caminho.desenhaCaminho();
+  if (caminhoBarco != null) caminhoBarco.desenhaCaminho();
+
   player.display();
 
   if (!player.verificarBarco()) {
@@ -52,7 +51,7 @@ void mouseDragged() {
 
 void mouseReleased() {
   if (!dragging) {
-    if (tp){ // Sistema de teletransporte só para testes!
+    if (tp) { // Sistema de teletransporte só para testes
       player.position = new PVector(map.gridPosX(mouseX), map.gridPosY(mouseY));
       tp = false;
     }
@@ -65,14 +64,18 @@ void mouseReleased() {
 
     // Verifica se o destino é água, se for o jogador vai para o barco pelo caminhio mais curto e depois vai para o destino
     if (map.getTileValue((int)destino.x, (int)destino.y) == 0 && !player.pegouBarco) {
-      caminhoBarco.setCaminho(barco.posicao, origem, player.pegouBarco);
-      caminho.setCaminho(destino, barco.posicao, true);
+      // Acha o caminho mais curto da origem ate o barco
+      caminhoBarco = new Caminho(barco.posicao, origem, player.pegouBarco);
+      // Acha o caminho mais curto do barco ate o destino considerando que o player pode andar na agua
+      caminho = new Caminho(destino, barco.posicao, true);
+      // Junta os dois caminhos encontrados
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
     } else if (true){
-      caminho.setCaminho(destino, origem, player.pegouBarco);
+      // Acha o caminho mais curto da origem ao destino
+      caminho = new Caminho(destino, origem, player.pegouBarco);
       player.setCaminho(caminho.caminho);
-      caminhoBarco.setCaminho(new PVector(0, 0), new PVector(0, 0), player.pegouBarco); // reseta o caminho ate o barco
+      caminhoBarco = null; // Resseta o caminho do barco
     }
   } else dragging = false;
 }
