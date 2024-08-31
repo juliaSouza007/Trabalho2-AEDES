@@ -1,14 +1,21 @@
+import java.util.ArrayList; 
+
 class Map {
   int chunkSize, tileSize;
   float offsetX, offsetY;
   HashMap<String, Chunk> chunks;
+  ArrayList<Stone> stones;
+  int stoneDistance = 5;
 
-  Map(int chunkSize, int tileSize) {
+  Map(int chunkSize, int tileSize, PVector playerPosicao, int maxDist) {
     this.chunkSize = chunkSize;
     this.tileSize = tileSize;
     this.offsetX = 0;
     this.offsetY = 0;
     this.chunks = new HashMap<String, Chunk>();
+    
+    this.stones = new ArrayList<Stone>();
+    generateStones(playerPosicao, maxDist);
   }
 
   void display() {
@@ -26,6 +33,10 @@ class Map {
         }
         chunks.get(key).display(offsetX, offsetY);
       }
+    }
+
+    for (Stone stone : stones) {
+      stone.display();
     }
   }
 
@@ -48,6 +59,18 @@ class Map {
     offsetX = newOffsetX;
     offsetY = newOffsetY;
   }
+  
+  void generateStones(PVector playerPosicao, int maxDist) {
+  // Gera pedras verdadeiras
+  for (int i = 0; i < 5; i++) {
+    stones.add(new Stone(playerPosicao, maxDist, true));
+  }
+
+  // Gera pedras falsas
+  for (int i = 0; i < 5; i++) {
+    stones.add(new Stone(playerPosicao, maxDist, false));
+  }
+}
   
   int gridPosX(int xScreen){
     return floor((-offsetX + xScreen) / tileSize);
