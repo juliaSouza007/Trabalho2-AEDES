@@ -25,7 +25,6 @@ void setup() {
   map = new Map(chunkSize, tileSize, new PVector(x, y), 20);
   map.reset(x, y);
   player = new Player(x, y);
-
   barco = new Barco(new PVector(x, y), 30);  
 }
 
@@ -90,7 +89,14 @@ void mouseReleased() {
 
 void keyPressed() {
 
-  if (key == 'c' || key == 'C') map.reset();
+  if (key == 'c' || key == 'C') {
+    map.reset(x, y);
+    caminho = null;
+    caminhoBarco = null;
+    player = new Player(x, y);
+    barco = new Barco(new PVector(x, y), 30);  
+    centralizarPlayer();
+  }
   
   // Chama move() para realizar o check de bloco
   if (key == 'w' || key == 'W') player.move((int)player.position.x, (int)player.position.y-1);
