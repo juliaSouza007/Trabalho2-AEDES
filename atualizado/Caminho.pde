@@ -5,12 +5,12 @@ class Caminho {
   int numVertices;
   int linha;
   int coluna;
-  float[][] adj;
+  float[][] adj; // matrizAdj
   PVector destino; // Posicao do destino no grid
   PVector origem; // Posicao da origem no grid
-  boolean barco;
-  Stack<Integer> icaminho;
-  Stack<PVector> caminho;
+  boolean barco; // Se pode andar na água ou não
+  Stack<Integer> icaminho; // Contém os vértices que constituem o caminho
+  Stack<PVector> caminho; // Posição no grid de cada vértice que constitui o caminnho
 
   // Construtor da classe Caminho
   Caminho(PVector destino, PVector origem, boolean barco) {
