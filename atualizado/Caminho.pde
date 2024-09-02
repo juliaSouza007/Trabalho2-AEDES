@@ -206,7 +206,7 @@ class Caminho {
     }
 
 
-    // Reconstrói o caminho mais curto usando a pilha e desenha o caminho encontrado
+    // Reconstrói o caminho mais curto usando a pilha
     this.icaminho.push(iDestino); // Inicia com o vértice de destino
     int v = anterior[iDestino]; // Obtém o vértice anterior ao destino
 
@@ -215,7 +215,6 @@ class Caminho {
       this.icaminho.push(v);
       v = anterior[v];
     }
-
   }
 
   void guardaCaminho() {
