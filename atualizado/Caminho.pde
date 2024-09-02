@@ -5,12 +5,12 @@ class Caminho {
   int numVertices;
   int linha;
   int coluna;
-  float[][] adj; // matrizAdj
+  float[][] adj;
   PVector destino; // Posicao do destino no grid
   PVector origem; // Posicao da origem no grid
-  boolean barco; // Se pode andar na água ou não
-  Stack<Integer> icaminho; // Contém os vértices que constituem o caminho
-  Stack<PVector> caminho; // Posição no grid de cada vértice que constitui o caminnho
+  boolean barco;
+  Stack<Integer> icaminho;
+  Stack<PVector> caminho;
 
   // Construtor da classe Caminho
   Caminho(PVector destino, PVector origem, boolean barco) {
@@ -207,17 +207,15 @@ class Caminho {
 
 
     // Reconstrói o caminho mais curto usando a pilha e desenha o caminho encontrado
-    Stack<Integer> caminho = new Stack<Integer>(); // Pilha para armazenar o caminho do destino até a origem
-    caminho.push(iDestino); // Inicia com o vértice de destino
+    this.icaminho.push(iDestino); // Inicia com o vértice de destino
     int v = anterior[iDestino]; // Obtém o vértice anterior ao destino
 
     // Preenche a pilha com os vértices do caminho mais curto
     while (v >= 0) {
-      caminho.push(v);
+      this.icaminho.push(v);
       v = anterior[v];
     }
 
-    this.icaminho = caminho;
   }
 
   void guardaCaminho() {
@@ -244,9 +242,9 @@ class Caminho {
         if (this.icaminho.contains(i) && this.icaminho.contains(j) && adj[i][j] > 0) {
           stroke(255, 0, 0);
           line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
-        }// else if (adj[i][j] > 0) {
-        //    line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
-        //}
+        } //else if (adj[i][j] > 0) {
+           // line(map.screenPosX(posXTerrenoGrid(j)), map.screenPosY(posYTerrenoGrid(j)), map.screenPosX(posXTerrenoGrid(i)), map.screenPosY(posYTerrenoGrid(i)));
+       // }
       }
     }
   }
