@@ -40,17 +40,17 @@ void setup() {
   map.reset(x, y);
   player = new Player(x, y);
 
-  barco = new Barco(new PVector(x, y), 30);  
-  
+  barco = new Barco(new PVector(x, y), 30);
+
   // Fonte
   fonte = createFont("Minecraft.ttf", 50);
-  
+
   // Botoes
   play = new Botao(width/2-180/2, height-180, 180, 45, #795126, #34210C, "PLAY", #FFC85A, 30);
   exit = new Botao(width/2-180/2, height-110, 180, 35, #795126, #34210C, "EXIT", #FFC85A, 25);
   restart = new Botao(width/2-145, height-140, 135, 45, #795126, #34210C, "RESTART", #FFC85A, 25);
   back = new Botao(width/2+20, height-140, 125, 45, #795126, #34210C, "EXIT", #FFC85A, 25);
-  
+
   telaInicial();
 }
 
@@ -59,35 +59,35 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-  
+
   if (play.pressed && !gameOver) {
-    
+
     collectStone(player, map);
-  
+
     if (caminho != null) caminho.desenhaCaminho();
     if (caminhoBarco != null) caminhoBarco.desenhaCaminho();
-  
+
     player.display();
-  
+
     if (!player.verificarBarco()) {
       barco.display();
     }
-    
-    for (Stone stone : map.stones){
-      if (stone.checkCollision((int)player.position.x, (int)player.position.y)){
+
+    for (Stone stone : map.stones) {
+      if (stone.checkCollision((int)player.position.x, (int)player.position.y)) {
         stone.display();
       }
     }
-    
+
     if (ganhou) {
       telaFinal();
     }
   } else if (gameOver) {
     telaFinal();
-  }else {
+  } else {
     telaInicial();
   }
-  
+
   if (exit.pressed) {
     exit();
   }
@@ -104,7 +104,7 @@ void mouseReleased() {
       player.position = new PVector(map.gridPosX(mouseX), map.gridPosY(mouseY));
       tp = false;
     }
-    
+
     // Pega as coordenadas do destino
     destino.x = map.gridPosX(mouseX);
     destino.y = map.gridPosY(mouseY);
@@ -120,7 +120,7 @@ void mouseReleased() {
       // Junta os dois caminhos encontrados
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
-    } else if (true){
+    } else if (true) {
       // Acha o caminho mais curto da origem ao destino
       caminho = new Caminho(destino, origem, player.pegouBarco);
       player.setCaminho(caminho.caminho);
@@ -131,24 +131,30 @@ void mouseReleased() {
 
 void keyPressed() {
 
-  if (key == 'c' || key == 'C') map.reset();
-  
+  if (key == 'c' || key == 'C') {
+    map.reset(x, y);
+    caminho = null;
+    caminhoBarco = null;
+    player = new Player(x, y);
+    barco = new Barco(new PVector(x, y), 30);
+  }
+
   // Chama move() para realizar o check de bloco
   if (key == 'w' || key == 'W') player.move((int)player.position.x, (int)player.position.y-1);
   if (key == 's' || key == 'S') player.move((int)player.position.x, (int)player.position.y+1);
   if (key == 'a' || key == 'A') player.move((int)player.position.x-1, (int)player.position.y);
   if (key == 'd' || key == 'D') player.move((int)player.position.x+1, (int)player.position.y);
-  
+
   if (key == 'p' || key == 'P') centralizarPlayer();
-  
+
   if (key == 't') tp = true;
 }
-  
+
 void centralizarPlayer() {
   // Calcular o offset para centralizar o player na tela
   float offsetX = width / 2 - player.position.x * tileSize;
   float offsetY = height / 2 - player.position.y * tileSize;
-  
+
   // Atualizar a posição do mapa com o novo offset
   map.setOffset(offsetX, offsetY);
 }
