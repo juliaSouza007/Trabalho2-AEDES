@@ -23,7 +23,7 @@ class Barco {
   }
   
   void display() {
-      fill(#555033);
+      fill(#432F09);
       ellipse(map.screenPosX((int)posicao.x), map.screenPosY((int)posicao.y), 10, 10);
   }
 }

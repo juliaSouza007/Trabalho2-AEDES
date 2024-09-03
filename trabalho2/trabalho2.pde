@@ -1,17 +1,31 @@
 int chunkSize;
 int tileSize;
 boolean dragging;
+
 Map map;
 Caminho caminho;
 Caminho caminhoBarco;
 Barco barco;
 Player player;
 Stone stone;
+
+// Fontes
+PFont fonte;
+
+// Botoes
+Botao play;
+Botao exit;
+Botao restart;
+Botao back;
+
 int x, y;
 PVector destino;
 PVector origem;
 int speedUp = 15; // Aumentar velocidade geral, 1 para Normal
 boolean tp = false; // teleport
+int pedrasColetadas = 0;
+boolean gameOver = false;
+boolean ganhou = false;
 
 void setup() {
   size(800, 800);
@@ -22,11 +36,22 @@ void setup() {
   y = 1000;
   destino = new PVector(x, y);
   origem = new PVector(x, y);
-  map = new Map(chunkSize, tileSize, new PVector(x, y), 20);
+  map = new Map(chunkSize, tileSize, new PVector(x, y), 10);
   map.reset(x, y);
   player = new Player(x, y);
 
   barco = new Barco(new PVector(x, y), 30);  
+  
+  // Fonte
+  fonte = createFont("Minecraft.ttf", 50);
+  
+  // Botoes
+  play = new Botao(width/2-180/2, height-180, 180, 45, #795126, #34210C, "PLAY", #FFC85A, 30);
+  exit = new Botao(width/2-180/2, height-110, 180, 35, #795126, #34210C, "EXIT", #FFC85A, 25);
+  restart = new Botao(width/2-145, height-140, 135, 45, #795126, #34210C, "RESTART", #FFC85A, 25);
+  back = new Botao(width/2+20, height-140, 125, 45, #795126, #34210C, "EXIT", #FFC85A, 25);
+  
+  telaInicial();
 }
 
 void draw() {
@@ -34,21 +59,37 @@ void draw() {
   stroke(#B7BDC1);
   strokeWeight(0.5);
   map.display();
-  collectStone(player, map);
   
-  if (caminho != null) caminho.desenhaCaminho();
-  if (caminhoBarco != null) caminhoBarco.desenhaCaminho();
-
-  player.display();
-
-  if (!player.verificarBarco()) {
-    barco.display();
+  if (play.pressed && !gameOver) {
+    
+    collectStone(player, map);
+  
+    if (caminho != null) caminho.desenhaCaminho();
+    if (caminhoBarco != null) caminhoBarco.desenhaCaminho();
+  
+    player.display();
+  
+    if (!player.verificarBarco()) {
+      barco.display();
+    }
+    
+    for (Stone stone : map.stones){
+      if (stone.checkCollision((int)player.position.x, (int)player.position.y)){
+        stone.display();
+      }
+    }
+    
+    if (ganhou) {
+      telaFinal();
+    }
+  } else if (gameOver) {
+    telaFinal();
+  }else {
+    telaInicial();
   }
   
-  for (Stone stone : map.stones){
-    if (stone.checkCollision((int)player.position.x, (int)player.position.y)){
-      stone.display();
-    }
+  if (exit.pressed) {
+    exit();
   }
 }
 
@@ -118,10 +159,13 @@ void collectStone(Player player, Map map) {
     if (stone.checkCollision((int)player.position.x, (int)player.position.y)) {
       if (stone.isReal) {
         println("Pedra verdadeira coletada!");
-        // Aumentar a pontuação ou outro efeito
+        pedrasColetadas++;
+        if (pedrasColetadas == 5) {
+          ganhou = true;
+        }
       } else {
         println("Você perdeu!");
-        // Implementar lógica de fim de jogo ou penalidade
+        gameOver = true;
       }
       map.stones.remove(i);  // Remove a pedra da lista após ser coletada
     }
