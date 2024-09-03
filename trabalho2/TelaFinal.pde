@@ -8,29 +8,33 @@ void telaFinal() {
     restart.Show();
     restart.Selecionado();
     if (restart.pressed) {
-      telaInicial();
+      map.reset(x, y);
+      caminho = null;
+      caminhoBarco = null;
+      player = new Player(x, y);
+      barco = new Barco(new PVector(x, y), 30);
     }
 
     back.Show();
     back.Selecionado();
     if (back.pressed) {
-       exit();
+      exit();
     }
-    
-    if(ganhou){
-       textFont(fonte, 48);
-       fill(#4B240B);
-       text("PARABENS", width/2, 160);
-       
-       text("Voce ganhou!!", width/2, 300);
+
+    if (ganhou) {
+      textFont(fonte, 48);
+      fill(#4B240B);
+      text("PARABENS", width/2, 160);
+
+      text("Voce ganhou!!", width/2, 300);
     } else {
-       textFont(fonte, 48);
-       fill(#4B240B);
-       text("POXA :(", width/2, 160);
-       
-       text("Perdeu parceiro.", width/2, 300);
-       text("Seja mais atento", width/2, 350);
-       text("da proxima!", width/2, 400);
+      textFont(fonte, 48);
+      fill(#4B240B);
+      text("POXA :(", width/2, 160);
+
+      text("Perdeu parceiro.", width/2, 300);
+      text("Seja mais atento", width/2, 350);
+      text("da proxima!", width/2, 400);
     }
   }
 }
