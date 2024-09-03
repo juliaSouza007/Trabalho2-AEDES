@@ -5,8 +5,6 @@ void telaInicial () {
 
   play.Show();
   play.Selecionado();
-  if (play.pressed) {
-  }
 
   exit.Show();
   exit.Selecionado();
