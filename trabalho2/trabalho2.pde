@@ -120,7 +120,7 @@ void mouseReleased() {
       // Junta os dois caminhos encontrados
       caminho.concatenaCaminho(caminhoBarco.caminho);
       player.setCaminho(caminho.caminho);
-    } else if (true) {
+    } else {
       // Acha o caminho mais curto da origem ao destino
       caminho = new Caminho(destino, origem, player.pegouBarco);
       player.setCaminho(caminho.caminho);
